@@ -1,0 +1,27 @@
+name: Portfolio CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t vishal-portfolio .
+
+      - name: Verify Kubernetes Files
+        run: |
+          test -f k8s/deployment.yaml
+          test -f k8s/service.yaml
+
+      - name: Success Message
+        run: echo "CI/CD Pipeline Executed Successfully"
