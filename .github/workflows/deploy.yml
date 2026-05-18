@@ -15,13 +15,27 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: List Project Files
+        run: ls -R
+
       - name: Build Docker Image
         run: docker build -t vishal-portfolio .
 
       - name: Verify Kubernetes Files
         run: |
-          test -f k8s/deployment.yaml
-          test -f k8s/service.yaml
+          if [ -f k8s/deployment.yaml ]; then
+            echo "deployment.yaml exists"
+          else
+            echo "deployment.yaml missing"
+            exit 1
+          fi
+
+          if [ -f k8s/service.yaml ]; then
+            echo "service.yaml exists"
+          else
+            echo "service.yaml missing"
+            exit 1
+          fi
 
       - name: Success Message
         run: echo "CI/CD Pipeline Executed Successfully"
